@@ -111,6 +111,7 @@ async def async_setup_platform(
         SERVICE_OPEN_DOOR_SCHEMA,
         "async_open_door"
     )
+    _LOGGER.debug(f"{name} -> async_setup_platform done")
     return True
 
 
@@ -275,6 +276,7 @@ class DahuaVTOClient(asyncio.Protocol):
                     if tag:
                         result["tag"] = tag
                     result["entity_id"] = self.entity.entity_id
+                    _LOGGER.debug(f"FireEvent({DOMAIN}): {result}")
                     self.hass.bus.fire(DOMAIN, result)
             finally:
                 await self.command({
@@ -313,6 +315,8 @@ class DahuaVTO(Entity):
         self._name = name
         self._state = None
         self.protocol = None
+
+        _LOGGER.debug(f"Init {name}")
 
     async def async_run(self):
         while True:
