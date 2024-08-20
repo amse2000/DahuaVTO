@@ -2,6 +2,8 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 [![Validate](https://github.com/myhomeiot/DahuaVTO/actions/workflows/validate.yaml/badge.svg)](https://github.com/myhomeiot/DahuaVTO/actions/workflows/validate.yaml)
 
+forked from <a data-hovercard-type="repository" data-hovercard-url="/myhomeiot/DahuaVTO/hovercard" class="Link--inTextBlock" href="/myhomeiot/DahuaVTO">myhomeiot/DahuaVTO</a>
+
 A Home Assistant custom integration for control Dahua VTO/VTH devices.
 
 Please ⭐️ this repo if you find it useful.
