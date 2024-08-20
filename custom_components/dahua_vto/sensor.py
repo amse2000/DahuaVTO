@@ -181,7 +181,8 @@ class DahuaVTOClient(asyncio.Protocol):
                 raise Exception("Heartbeat already run")
             self.heartbeat = self.loop.create_task(self.heartbeat_loop())
             self.send({"method": "eventManager.attach",
-                       "params": {"codes": ["All"]}})
+                       #"params": {"codes": ["All"]}})
+                       "params": {"codes": ["AccessControl","Invite","NewFile","BackKeyLight"]}})
             self.send({"method": "configManager.attach",
                        "params": {"name": "CommGlobal"}})
         elif message.get("method") == "client.notifyEventStream":
