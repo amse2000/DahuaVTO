@@ -111,7 +111,7 @@ async def async_setup_platform(
         SERVICE_OPEN_DOOR_SCHEMA,
         "async_open_door"
     )
-    _LOGGER.debug(f"{name} -> async_setup_platform done")
+    #_LOGGER.debug(f"{name} -> async_setup_platform done")
     return True
 
 
@@ -135,6 +135,8 @@ class DahuaVTOClient(asyncio.Protocol):
         self.on_response_id = None
         self.on_response = None
         self.attrs = None
+
+        _LOGGER.debug(f"Init DahuaVTOClient(asyncio.Protocol)")
 
     def connection_made(self, transport):
         self.transport = transport
@@ -185,11 +187,13 @@ class DahuaVTOClient(asyncio.Protocol):
         elif message.get("method") == "client.notifyEventStream":
             for event in params.get("eventList"):
                 event["entity_id"] = self.entity.entity_id
+                _LOGGER.debug(f"FireEvent({DOMAIN}): {event}")
                 self.hass.bus.fire(DOMAIN, event)
         elif message.get("method") == "client.notifyConfigChange":
             table = params.get("table")
             table["entity_id"] = self.entity.entity_id
             table["Code"] = message.get("method")
+            _LOGGER.debug(f"FireTable({DOMAIN}): {table}")
             self.hass.bus.fire(DOMAIN, table)
 
     def data_received(self, data):
@@ -256,6 +260,7 @@ class DahuaVTOClient(asyncio.Protocol):
             if tag:
                 result["tag"] = tag
             result["entity_id"] = self.entity.entity_id
+            _LOGGER.debug(f"FireResult({DOMAIN}): {result}")
             self.hass.bus.fire(DOMAIN, result)
 
     async def send_instance_command(
@@ -276,7 +281,7 @@ class DahuaVTOClient(asyncio.Protocol):
                     if tag:
                         result["tag"] = tag
                     result["entity_id"] = self.entity.entity_id
-                    _LOGGER.debug(f"FireEvent({DOMAIN}): {result}")
+                    _LOGGER.debug(f"FireResult({DOMAIN}): {result}")
                     self.hass.bus.fire(DOMAIN, result)
             finally:
                 await self.command({
@@ -316,7 +321,7 @@ class DahuaVTO(Entity):
         self._state = None
         self.protocol = None
 
-        _LOGGER.debug(f"Init {name}")
+        _LOGGER.debug(f"Init DahuaVTO(Entity) {name}")
 
     async def async_run(self):
         while True:
